@@ -1,0 +1,75 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Go ---
+# Binarios compilados
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+agent/agent
+agent/main
+
+# Dependencias vendor (si usaras go mod vendor)
+vendor/
+
+# --- Variables de entorno y credenciales ---
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.crt
+
+# --- Bases de datos y almacenamiento local ---
+*.sqlite
+*.sqlite3
+*.db
+# Datos persistentes de Docker / Redis si mapeas carpetas locales
+data/
+redis_data/
+postgres_data/
+
+# --- Logs de pruebas y ejecución ---
+*.log
+logs/
+
+# --- IDEs y editores ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# --- Testing / Cobertura ---
+.coverage
+htmlcov/
+.pytest_cache/

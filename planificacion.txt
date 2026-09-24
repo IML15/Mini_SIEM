@@ -1,0 +1,30 @@
+mini-siem/
+│
+├── agent/                  # Código del agente local (Go o Python)
+│   ├── internal/watcher/
+│   ├── config.yaml
+│   └── main.go
+│
+├── server/                 # Backend principal
+│   ├── api/                # Endpoints de ingesta y gestión
+│   ├── engine/             # Lógica de evaluación de reglas
+│   ├── models/             # Esquemas de base de datos / Pydantic
+│   └── main.py
+│
+├── rules/                  # Biblioteca de reglas de detección YAML
+│   ├── linux/
+│   │   └── ssh_bruteforce.yaml
+│   └── network/
+│       └── port_scan_detected.yaml
+│
+├── dashboard/              # Frontend (templates o SPA)
+│
+├── deployments/            # Despliegue con un solo comando
+│   ├── docker-compose.yml  # Levanta PostgreSQL, Redis y el Backend
+│   └── Dockerfile
+│
+├── .gitignore     
+│
+├── tests/                  # Tests unitarios del motor de reglas
+├── README.md               # Diagrama de arquitectura, capturas y guía de inicio rápido
+└── LICENSE
