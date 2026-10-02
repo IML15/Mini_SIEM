@@ -1,0 +1,15 @@
+id: linux-ssh-bruteforce
+name: "Fuerza Bruta SSH Detectada"
+description: "Múltiples intentos fallidos de inicio de sesión SSH desde la misma IP."
+severity: HIGH
+
+# Condiciones que debe cumplir cada evento
+filter:
+  source_type: "linux_auth"
+  auth.success: false
+
+# Lógica de detección con ventana de tiempo
+detection:
+  threshold: 3        # Disparar al 3er evento coincidente
+  time_window: 60     # en un intervalo de 60 segundos
+  group_by: "network.src_ip"
