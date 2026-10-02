@@ -1,0 +1,5 @@
+server_url: "http://localhost:8000/api/v1/events"
+hostname: "srv-ubuntu-prod"
+log_file: "./test_auth.log"
+poll_interval_ms: 500
+
