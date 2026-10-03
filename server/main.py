@@ -1,5 +1,10 @@
 from fastapi import FastAPI
 from server.api.ingest import router as ingest_router
+from server.api.alerts import router as alerts_router
+from server.database import init_db
+
+# Inicializar tablas SQLite
+init_db()
 
 app = FastAPI(
     title="Mini-SIEM Server",
@@ -9,6 +14,7 @@ app = FastAPI(
 
 # Registrar las rutas de ingesta
 app.include_router(ingest_router)
+app.include_router(alerts_router)
 
 @app.get("/health")
 async def health_check():
