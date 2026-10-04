@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini-SIEM Console</title>
+  <!-- Enlace al archivo CSS compartido -->
+  <link rel="stylesheet" href="/dashboard/styles.css">
+</head>
+<body>
+
+  <header class="siem-header">
+    <h1 class="siem-title">🛡️ Mini-SIEM Console</h1>
+    <div class="status-badge">
+      <div class="status-dot"></div>
+      En vivo
+    </div>
+  </header>
+
+  <section class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-title">Total Alertas</div>
+      <div class="metric-value" id="totalAlerts">0</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-title">Severidad Alta (HIGH)</div>
+      <div class="metric-value" style="color: var(--sev-high);" id="highAlerts">0</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-title">IPs / Entidades Únicas</div>
+      <div class="metric-value" id="uniqueEntities">0</div>
+    </div>
+  </section>
+
+  <div class="table-container">
+    <table class="siem-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha (UTC)</th>
+          <th>Regla</th>
+          <th>Severidad</th>
+          <th>Entidad Atacante</th>
+          <th>Eventos</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody id="alertsBody">
+        <tr>
+          <td colspan="7" class="empty-state">Buscando alertas activas...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Enlace a la lógica JS -->
+  <script src="/dashboard/app.js"></script>
+</body>
+</html>

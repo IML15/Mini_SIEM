@@ -11,8 +11,10 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/")
+@router.get("", status_code=200)
+@router.get("/", status_code=200)
 def list_alerts(db: Session = Depends(get_db)):
     """Devuelve las alertas generadas ordenadas de más reciente a más antigua."""
     alerts = db.query(AlertRecord).order_by(AlertRecord.created_at.desc()).all()
     return alerts
+

@@ -1,0 +1,206 @@
+/* ==========================================================================
+   VARIABLES DE SISTEMA Y TEMA
+   ========================================================================== */
+:root {
+  /* Paleta Base (Modo Oscuro) */
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-hover: #334155;
+  --color-border: #334155;
+  
+  /* Textos */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-inverse: #0f172a;
+
+  /* Severidades de Seguridad */
+  --sev-critical: #dc2626;
+  --sev-high: #ef4444;
+  --sev-medium: #f59e0b;
+  --sev-low: #3b82f6;
+  --sev-info: #06b6d4;
+  --status-online: #10b981;
+
+  /* Tipografías y Tamaños */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+
+  /* Espaciados y Bordes */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-full: 9999px;
+}
+
+/* ==========================================================================
+   RESETEO Y ESTRUCTURA BASE
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: var(--spacing-xl);
+  background-color: var(--color-bg);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   CABECERA Y ESTADO
+   ========================================================================== */
+.siem-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-md);
+}
+
+.siem-title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--status-online);
+  background: rgba(16, 185, 129, 0.1);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--status-online);
+  border-radius: var(--radius-full);
+  animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ==========================================================================
+   MÉTRICAS (KPIs)
+   ========================================================================== */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.metric-card {
+  background: var(--color-surface);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.metric-title {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-xs);
+}
+
+.metric-value {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   TABLAS Y DATOS
+   ========================================================================== */
+.table-container {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.siem-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.siem-table th,
+.siem-table td {
+  padding: var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.siem-table th {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.05em;
+}
+
+.siem-table tr:last-child td {
+  border-bottom: none;
+}
+
+.siem-table tr:hover td {
+  background-color: var(--color-surface-hover);
+}
+
+.code-badge {
+  font-family: var(--font-mono);
+  background: rgba(0, 0, 0, 0.3);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}
+
+/* ==========================================================================
+   COMPONENTES DE SEVERIDAD
+   ========================================================================== */
+.severity {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.severity-CRITICAL { background: rgba(220, 38, 38, 0.2); color: var(--sev-critical); }
+.severity-HIGH     { background: rgba(239, 68, 68, 0.2); color: var(--sev-high); }
+.severity-MEDIUM   { background: rgba(245, 158, 11, 0.2); color: var(--sev-medium); }
+.severity-LOW      { background: rgba(59, 130, 246, 0.2); color: var(--sev-low); }
+.severity-INFO     { background: rgba(6, 182, 212, 0.2); color: var(--sev-info); }
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-muted);
+}
