@@ -1,0 +1,13 @@
+id: network-port-scan
+name: "Escaneo de Puertos Detectado"
+description: "Múltiples conexiones a puertos distintos desde una misma IP de origen."
+severity: MEDIUM
+
+filter:
+  source_type: "network_flow"
+
+detection:
+  threshold: 5
+  time_window: 30
+  group_by: "network.src_ip"
+  distinct: "network.dst_port"

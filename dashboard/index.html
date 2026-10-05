@@ -10,48 +10,79 @@
 <body>
 
   <header class="siem-header">
-    <h1 class="siem-title">🛡️ Mini-SIEM Console</h1>
-    <div class="status-badge">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">S</div>
+      <div>
+        <p class="eyebrow">Centro de operaciones</p>
+        <h1 class="siem-title">Mini-SIEM Console</h1>
+      </div>
+    </div>
+    <div class="status-badge" role="status">
       <div class="status-dot"></div>
-      En vivo
+      <span>Monitorización activa</span>
     </div>
   </header>
 
+  <main>
+    <div class="section-heading">
+      <div>
+        <h2>Resumen de seguridad</h2>
+        <p>Actividad detectada en tu infraestructura.</p>
+      </div>
+      <span class="refresh-label">Actualización automática · 2 s</span>
+    </div>
+
   <section class="metrics-grid">
     <div class="metric-card">
-      <div class="metric-title">Total Alertas</div>
+      <div class="metric-icon metric-icon-blue" aria-hidden="true">↗</div>
+      <div class="metric-title">Total de alertas</div>
       <div class="metric-value" id="totalAlerts">0</div>
+      <div class="metric-caption">Alertas registradas</div>
     </div>
     <div class="metric-card">
-      <div class="metric-title">Severidad Alta (HIGH)</div>
-      <div class="metric-value" style="color: var(--sev-high);" id="highAlerts">0</div>
+      <div class="metric-icon metric-icon-red" aria-hidden="true">!</div>
+      <div class="metric-title">Severidad alta</div>
+      <div class="metric-value value-high" id="highAlerts">0</div>
+      <div class="metric-caption">Requieren atención</div>
     </div>
     <div class="metric-card">
-      <div class="metric-title">IPs / Entidades Únicas</div>
+      <div class="metric-icon metric-icon-violet" aria-hidden="true">#</div>
+      <div class="metric-title">Entidades únicas</div>
       <div class="metric-value" id="uniqueEntities">0</div>
+      <div class="metric-caption">IPs o activos afectados</div>
     </div>
   </section>
 
-  <div class="table-container">
-    <table class="siem-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Fecha (UTC)</th>
-          <th>Regla</th>
-          <th>Severidad</th>
-          <th>Entidad Atacante</th>
-          <th>Eventos</th>
-          <th>Descripción</th>
-        </tr>
-      </thead>
-      <tbody id="alertsBody">
-        <tr>
-          <td colspan="7" class="empty-state">Buscando alertas activas...</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <section class="alerts-panel" aria-labelledby="alerts-title">
+      <div class="panel-heading">
+        <div>
+          <h2 id="alerts-title">Alertas recientes</h2>
+          <p>Incidentes ordenados del más reciente al más antiguo.</p>
+        </div>
+        <span class="live-indicator"><span></span> En vivo</span>
+      </div>
+      <div class="table-container">
+        <table class="siem-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Fecha (UTC)</th>
+              <th>Regla</th>
+              <th>Severidad</th>
+              <th>Entidad atacante</th>
+              <th>Eventos</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody id="alertsBody">
+            <tr>
+              <td colspan="7" class="empty-state">Buscando alertas activas...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
   <!-- Enlace a la lógica JS -->
   <script src="/dashboard/app.js"></script>

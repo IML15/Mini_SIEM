@@ -11,7 +11,7 @@ class RuleEngine:
         self.rules_dir = rules_dir
         self.rules: List[Dict[str, Any]] = []
         # Historial en memoria: { rule_id: { group_value: [timestamps] } }
-        self.history: Dict[str, Dict[str, List[datetime]]] = defaultdict(lambda: defaultdict(list))
+        self.history: Dict[str, Dict[str, List[tuple]]] = defaultdict(lambda: defaultdict(list))
         self.load_rules()
 
     def load_rules(self):
@@ -62,33 +62,44 @@ class RuleEngine:
             group_key_field = detection.get("group_by")
             threshold = detection.get("threshold", 1)
             time_window = detection.get("time_window", 60)
+            distinct_field = detection.get("distinct")
 
             # Obtener el valor de agrupación (ej. IP de origen)
             group_val = self._get_nested_field(event, group_key_field) if group_key_field else "global"
             if not group_val:
                 continue
 
+            distinct_val = self._get_nested_field(event, distinct_field) if distinct_field else None
+
             rule_id = rule["id"]
-            timestamps = self.history[rule_id][group_val]
+            records = self.history[rule_id][group_val]
 
-            # 2. Agregar evento actual y descartar eventos fuera de la ventana
-            timestamps.append(event_time)
+            # Guardar evento y descartar los que estén fuera de la ventana temporal
+            records.append((event_time, distinct_val))
             cutoff_time = event_time - timedelta(seconds=time_window)
-            self.history[rule_id][group_val] = [t for t in timestamps if t >= cutoff_time]
+            records = [item for item in records if item[0] >= cutoff_time]
+            self.history[rule_id][group_val] = records
 
-            # 3. Evaluar umbral
-            if len(self.history[rule_id][group_val]) >= threshold:
+            # Conteo normal o conteo por valores únicos
+            if distinct_field:
+                unique_vals = {item[1] for item in records if item[1] is not None}
+                count = len(unique_vals)
+                print(f"[DEBUG Rule: {rule_id}] IP: {group_val} -> Puertos vistos: {unique_vals} ({count}/{threshold})")
+            else:
+                count = len(records)
+                print(f"[DEBUG Rule: {rule_id}] IP: {group_val} -> Conteo: {count}/{threshold}")
+
+            if count >= threshold:
                 alert = {
                     "rule_id": rule_id,
                     "rule_name": rule["name"],
                     "severity": rule["severity"],
                     "timestamp": event_time.isoformat(),
-                    "entity": group_val,
-                    "count": len(self.history[rule_id][group_val]),
+                    "entity": str(group_val),
+                    "count": count,
                     "description": rule["description"]
                 }
                 alerts.append(alert)
-                # Reseteamos tras disparar la alerta para evitar spam inmediato
                 self.history[rule_id][group_val] = []
 
         return alerts
