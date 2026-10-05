@@ -10,7 +10,17 @@ import (
 	"os"
 	"regexp"
 	"time"
+
+	"gopkg.in/yaml.v3"
 )
+
+// Estructura de configuración
+type Config struct {
+	ServerURL      string `yaml:"server_url"`
+	Hostname       string `yaml:"hostname"`
+	LogFile        string `yaml:"log_file"`
+	PollIntervalMs int    `yaml:"poll_interval_ms"`
+}
 
 // Estructuras que coinciden con el esquema Pydantic del servidor
 type NetworkDetails struct {
@@ -31,12 +41,17 @@ type SecurityEvent struct {
 }
 
 var (
-	serverURL = "http://localhost:8000/api/v1/events"
-	hostname  = "srv-ubuntu-prod"
-	logFile   = "test_auth.log"
-	// Regex típica de fallo SSH: "Failed password for [invalid user] <user> from <ip>"
+	cfg          Config
 	sshFailRegex = regexp.MustCompile(`Failed password for (?:invalid user )?(\S+) from (\S+)`)
 )
+
+func loadConfig(path string) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	return yaml.Unmarshal(data, &cfg)
+}
 
 func sendEvent(event SecurityEvent) error {
 	data, err := json.Marshal(event)
@@ -44,7 +59,8 @@ func sendEvent(event SecurityEvent) error {
 		return err
 	}
 
-	resp, err := http.Post(serverURL, "application/json", bytes.NewBuffer(data))
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Post(cfg.ServerURL, "application/json", bytes.NewBuffer(data))
 	if err != nil {
 		return err
 	}
@@ -63,7 +79,7 @@ func parseLine(line string) *SecurityEvent {
 		ip := matches[2]
 
 		return &SecurityEvent{
-			Hostname:   hostname,
+			Hostname:   cfg.Hostname,
 			SourceType: "linux_auth",
 			RawMessage: line,
 			Network:    &NetworkDetails{SrcIP: ip},
@@ -74,20 +90,27 @@ func parseLine(line string) *SecurityEvent {
 }
 
 func main() {
-	fmt.Printf("[*] Iniciando Mini-SIEM Agent monitoreando: %s\n", logFile)
+	configFile := "config.yaml"
+	if err := loadConfig(configFile); err != nil {
+		log.Fatalf("[-] Error cargando configuración (%s): %v", configFile, err)
+	}
+
+	fmt.Printf("[*] Iniciando Mini-SIEM Agent en host '%s'\n", cfg.Hostname)
+	fmt.Printf("[*] Monitoreando archivo: %s -> Envíos a: %s\n", cfg.LogFile, cfg.ServerURL)
 
 	// Crear el archivo si no existe
-	file, err := os.OpenFile(logFile, os.O_CREATE|os.O_RDONLY, 0644)
+	file, err := os.OpenFile(cfg.LogFile, os.O_CREATE|os.O_RDONLY, 0644)
 	if err != nil {
-		log.Fatalf("Error abriendo archivo: %v", err)
+		log.Fatalf("[-] Error abriendo archivo de log: %v", err)
 	}
 	defer file.Close()
 
-	// Ir al final del archivo para leer solo líneas nuevas
+	// Ir al final del archivo para procesar únicamente líneas nuevas
 	file.Seek(0, io.SeekEnd)
 
 	buffer := make([]byte, 1024)
 	var leftover string
+	pollDelay := time.Duration(cfg.PollIntervalMs) * time.Millisecond
 
 	for {
 		n, err := file.Read(buffer)
@@ -113,18 +136,18 @@ func main() {
 				}
 
 				if event := parseLine(line); event != nil {
-					fmt.Printf("[+] Intento SSH fallido detectado -> IP: %s, User: %s\n", event.Network.SrcIP, event.Auth.User)
+					fmt.Printf("[+] Evento detectado -> IP: %s, User: %s\n", event.Network.SrcIP, event.Auth.User)
 					if err := sendEvent(*event); err != nil {
-						fmt.Printf("[-] Error enviando evento: %v\n", err)
+						fmt.Printf("[-] Error enviando evento al SIEM: %v\n", err)
 					}
 				}
 			}
 		}
 
 		if err != nil && err != io.EOF {
-			log.Printf("Error leyendo: %v", err)
+			log.Printf("[-] Error leyendo stream: %v", err)
 		}
 
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(pollDelay)
 	}
 }
