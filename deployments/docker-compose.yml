@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  siem-server:
+    build:
+      context: ..
+      dockerfile: deployments/Dockerfile
+    container_name: mini-siem-server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../minisiem.db:/app/minisiem.db         # Persistencia de la base de datos fuera del contenedor
+      - ../rules:/app/rules                     # Mapeo de reglas para modificarlas sin reconstruir la imagen
+      - ../server:/app/server                   # Refleja cambios en Python al instante
+      - ../dashboard:/app/dashboard             # Refleja cambios en HTML/CSS/JS al instante
+      
+    command: ["uvicorn", "server.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    restart: unless-stopped
