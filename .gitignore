@@ -36,6 +36,7 @@ agent/agent
 agent/main
 agent/siem-agent      
 siem-agent
+**/siem-agent
 
 # Dependencias vendor
 vendor/
