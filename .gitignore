@@ -24,8 +24,7 @@ wheels/
 .installed.cfg
 *.egg
 
-# --- Go ---
-# Binarios compilados
+# --- Go (Binarios y artefactos compilados) ---
 *.exe
 *.exe~
 *.dll
@@ -35,8 +34,10 @@ wheels/
 *.out
 agent/agent
 agent/main
+agent/siem-agent      
+siem-agent
 
-# Dependencias vendor (si usaras go mod vendor)
+# Dependencias vendor
 vendor/
 
 # --- Variables de entorno y credenciales ---
@@ -52,16 +53,19 @@ secrets/
 *.sqlite
 *.sqlite3
 *.db
-# Datos persistentes de Docker / Redis si mapeas carpetas locales
+minisiem.db          
+
+# Datos persistentes de Docker / Redis
 data/
 redis_data/
 postgres_data/
 
-# --- Logs de pruebas y ejecución ---
+# --- Logs y archivos de prueba ---
 *.log
 logs/
+agent/*.log             
 
-# --- IDEs y editores ---
+# --- IDEs y editores del sistema ---
 .vscode/
 .idea/
 *.sublime-project
@@ -69,7 +73,7 @@ logs/
 .DS_Store
 Thumbs.db
 
-# --- Testing / Cobertura ---
+# --- Testing / Cobertura / Caché ---
 .coverage
 htmlcov/
 .pytest_cache/
