@@ -1,5 +1,5 @@
 
-# 🛡️ Mini-SIEM: Lightweight Security Ingestion & Detection Engine
+# Mini-SIEM: Lightweight Security Ingestion & Detection Engine
 
 A lightweight, modular, and containerized SIEM (Security Information and Event Management) system. It features a standalone log collection agent written in Go, a centralized FastAPI backend with an in-memory temporal correlation engine powered by declarative YAML rules, SQLite relational persistence, and an interactive real-time operations dashboard[cite: 2].
 
