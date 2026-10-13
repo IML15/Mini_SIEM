@@ -1,7 +1,21 @@
 
 # Mini-SIEM: Lightweight Security Ingestion & Detection Engine
 
+*Publication date: 13/10/2026*
+
+> [!NOTE]
+> **Iker Marín López (IML15)**
+>
+> Cybersecurity Engineer (Universidad Rey Juan Carlos)
+>
+> **Links:** 🔗 [LinkedIn](https://www.linkedin.com/in/iker-marin-lopez-90791b379/) | 
+> 🐱[GitHub](https://github.com/IML15) | 📥 [Telegram](https://t.me/hueco44)
+
 A lightweight, modular, and containerized SIEM (Security Information and Event Management) system. It features a standalone log collection agent written in Go, a centralized FastAPI backend with an in-memory temporal correlation engine powered by declarative YAML rules, SQLite relational persistence, and an interactive real-time operations dashboard[cite: 2].
+
+> [!WARNING]
+> This document and tool have been created for educational purposes in a controlled environment. 
+> The author is not responsible for any misuse of the information presented herein.
 
 ---
 
