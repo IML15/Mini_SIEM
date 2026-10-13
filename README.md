@@ -198,4 +198,18 @@ Within seconds, the alert will register in the database and appear highlighted o
 * **Reset Database:** Stop the server (`docker compose down` or `Ctrl + C`), delete `minisiem.db` (`rm minisiem.db`), and restart the server. The application will automatically regenerate clean schema tables upon startup.
 
 
+---
 
+
+## 🗺️ Roadmap & Continuous Improvement
+
+This project is actively maintained as an evolving security laboratory. New modules, performance optimizations, and extended use cases will be introduced periodically.
+
+### Planned Enhancements:
+- [ ] Real-time incident streaming via WebSockets.
+- [ ] Notification dispatchers (Discord / Slack webhooks).
+- [ ] Active automated response mechanisms (IP null-routing / firewall rules).
+- [ ] Additional log parsers (e.g., Nginx access logs, sudo audit logs).
+
+### 🤝 Feedback & Contributions
+I am fully open to feedback, feature requests, and technical suggestions. If you have ideas on how to optimize rule evaluation, enhance endpoint telemetry, or improve detection logic, feel free to open an **Issue** or submit a **Pull Request**.
