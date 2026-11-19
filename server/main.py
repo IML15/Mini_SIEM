@@ -4,7 +4,16 @@ from fastapi.responses import FileResponse
 from server.api.ingest import router as ingest_router
 from server.api.alerts import router as alerts_router
 from server.database import init_db
+from firma_iml15 import mostrar_firma
 import os
+import sys
+
+# Firma IML15: se muestra al arrancar (python -m server.main o uvicorn server.main:app).
+# La variable evita que salga dos veces cuando --reload lanza el proceso hijo, y no se
+# muestra al ejecutar los tests.
+if os.environ.get("IML15_FIRMA_MOSTRADA") != "1" and "pytest" not in sys.modules:
+    os.environ["IML15_FIRMA_MOSTRADA"] = "1"
+    mostrar_firma(version="v0.1.0")
 
 # Inicializar tablas SQLite
 init_db()
@@ -39,7 +48,5 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    from firma_iml15 import mostrar_firma
-    mostrar_firma(version="v0.1.0")
     # Ejecuta el servidor en http://localhost:8000
     uvicorn.run("server.main:app", host="0.0.0.0", port=8000, reload=True)
