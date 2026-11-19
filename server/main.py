@@ -39,5 +39,7 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
+    from firma_iml15 import mostrar_firma
+    mostrar_firma(version="v0.1.0")
     # Ejecuta el servidor en http://localhost:8000
     uvicorn.run("server.main:app", host="0.0.0.0", port=8000, reload=True)
